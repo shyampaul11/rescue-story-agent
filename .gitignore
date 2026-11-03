@@ -1,0 +1,14 @@
+# Installed packages and Python's temporary files
+.venv/
+__pycache__/
+*.py[cod]
+
+# Local credentials should never be committed
+.env
+.env.*
+.streamlit/secrets.toml
+
+# Local logs and operating-system files
+*.log
+.DS_Store
+Thumbs.db
