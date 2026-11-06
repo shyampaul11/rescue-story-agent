@@ -1,14 +1,69 @@
-# Installed packages and Python's temporary files
-.venv/
+# Python environments and caches
+.venv*/
+venv/
+env/
 __pycache__/
 *.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage*
+htmlcov/
 
-# Local credentials should never be committed
+# Every local environment file, credential and token stays private
 .env
 .env.*
+secrets/
+credentials/
 .streamlit/secrets.toml
+*credential*.json
+*client_secret*.json
+google_client*.json
+*token*.json
+*.pem
+*.key
+*.p12
+*.pfx
 
-# Local logs and operating-system files
+# Animal workspaces, records, exports, private diagnostics and backups
+local_state/
+private*/
+backup*/
+*backup*/
+diagnostic*/
+*diagnostic*.json
+*diagnostic*.zip
+draft*/
+export*/
+record*/
+foundation_records/
+*.json
+*.jsonl
+*.csv
+*.tsv
+*.docx
+*.pdf
+*.xlsx
+*.xls
+*.png
+*.jpg
+*.jpeg
+*.webp
+*.gif
+*.mp4
+*.mov
+*.zip
+*.bak
+*.old
+
+# Local tooling, transfer reports, internal plans and operating-system files
+.transfer-review*/
+.vscode/
+.idea/
+.agents/
+.codex/
+.aws/
+docs/
 *.log
 .DS_Store
 Thumbs.db

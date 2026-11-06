@@ -1,128 +1,136 @@
-# Rescue Story Agent
+# Rescue Story Agent — Milestone 6
 
-**AI-powered animal adoption content creator**
+A local Python and Streamlit application for preparing animal adoption text.
+It imports selected animal information, builds an evidence-based Animal Profile,
+and prepares three Dutch and three English website drafts plus a Facebook draft
+in each language. Volunteers review, edit, copy and export text for manual use.
 
-A small Python and Streamlit app for learning how to build Rescue Story Agent.
-The long-term goal is to turn animal rescue histories and Google Drive photos/videos
-into Dutch adoption descriptions for a website and Facebook.
+The application does not publish to a website or Facebook. Google Drive access
+uses the read-only scope. Analysis and draft generation require explicit actions
+and may incur AI API charges. Reviewing saved work, editing and local assessment
+do not require new AI requests.
 
-## What milestone 1 does
+## Preserve your existing work first
 
-1. Shows an **Animal History** text box.
-2. Offers **Generate Website Text** and **Generate Facebook Text** buttons.
-3. Displays clearly labeled Dutch placeholder text after you enter a history and click a button.
+Saved writing, revisions and review notes belong to the application folder in
+which they were created, under `local_state/editorial/`. OAuth tokens and API
+configuration are also local to that folder. Transferring source code does not
+transfer or migrate these private files.
 
-The placeholders are fixed examples. They do not summarize, translate, or use the
-details of your history yet. Both previews can stay on screen together. Editing the
-history clears previous previews; blank input shows a helpful message.
+Keep using your existing working application to access its saved animal work.
+Do not delete or replace its folder, `.env`, credentials, virtual environment or
+`local_state`. Starting this checkout creates a separate local workspace. Saved
+work from another copy will not automatically appear here. Keep private exports
+as an additional backup; never commit them.
 
-There is no AI API, paid API, Google Drive connection, login, or deployment.
-No API keys are needed. The app does not save histories to files or send them to
-an AI service. Streamlit usage statistics are disabled. The server listens only
-on your computer. Closing the session can discard the text, so keep your own copy.
+## Install in a new checkout
 
-## Run on your computer
-
-Install **Python 3.12** from <https://www.python.org/downloads/>. On Windows,
-select **Add Python to PATH** during installation. This app was tested with Python 3.12.
-
-Open a terminal in the `rescue-story-agent` project folder, the folder containing
-`app.py` and `requirements.txt`. If the folder is in your current terminal location,
-enter:
-
-```sh
-cd rescue-story-agent
-```
-
-### macOS or Linux
-
-Create a virtual environment (a separate place for this project's Python packages),
-install Streamlit, and start the app:
-
-```sh
-python3 -m venv .venv
-.venv/bin/python -m pip install -r requirements.txt
-.venv/bin/python -m streamlit run app.py
-```
-
-### Windows (PowerShell or Command Prompt)
+Use a current Python version compatible with the packages in `requirements.txt`.
+From PowerShell in the folder containing `app.py`:
 
 ```powershell
-py -3.12 -m venv .venv
-.venv\Scripts\python.exe -m pip install -r requirements.txt
-.venv\Scripts\python.exe -m streamlit run app.py
+python -m venv .venv
+.\.venv\Scripts\python.exe -m pip install -r requirements.txt
 ```
 
-These commands use the virtual environment directly, so you do not need to activate it
-or change PowerShell's execution policy. An internet connection is needed to install
-the packages. You do not need an API key or internet access to generate the placeholders.
+These commands create a new environment for this checkout. Do not copy another
+application's `.venv` or overwrite an existing environment. If Python is not on
+PATH, use your installed Python launcher's equivalent command.
 
-Once Streamlit starts, open the local address printed in your terminal in a browser
-**on your own computer** (the default port is 8501). Keep the terminal open while using
-the app. Press **Ctrl+C** in that terminal to stop it.
+## Local configuration
 
-On later runs, open the project folder and run only the last command for your operating
-system. You only need to install again if you delete `.venv` or change the requirements.
+Create a new `.env` file only if this checkout does not already have one. Never
+overwrite an existing configuration. Configure these values locally:
 
-## Try it
-
-1. Enter: `Luna was rescued from a shelter and is now in foster care.`
-2. Click **Generate Website Text**. A website placeholder appears below the buttons.
-3. Click **Generate Facebook Text**. A Facebook placeholder appears as well.
-4. Change the history. The old previews disappear so you can start again.
-
-## Run the tests
-
-The tests use Python's built-in `unittest` tool and Streamlit's app testing tool.
-You do not need to install another testing package or keep the server running.
-
-macOS or Linux:
-
-```sh
-.venv/bin/python -m unittest discover -s tests -v
+```dotenv
+OPENAI_API_KEY=replace-with-your-private-api-key
+OPENAI_MODEL=replace-with-an-available-text-and-image-model
+AI_REASONING_EFFORT=
+OPENAI_CONTENT_MODEL=replace-with-an-available-writing-model
+CONTENT_REASONING_EFFORT=
+CONTENT_MAX_OUTPUT_TOKENS=16000
 ```
 
-Windows:
+Choose models available to your API project that support the application's
+Responses API and Structured Outputs requirements. Leave reasoning settings
+blank for models without that control. Shell environment variables take
+precedence over `.env`. Restart the application after configuration changes.
+Do not paste actual keys into source files, tests, screenshots or GitHub.
+
+For Google Drive, configure a Desktop OAuth client in your own Google Cloud
+project and place its downloaded JSON at `secrets/google_client.json` locally.
+The app stores the resulting token at `local_state/google_token.json`. Enter
+your own main Google Drive folder URL in the app; no private folder is built
+into this checkout. Connect Google Drive and select the animal to work on.
+Manual document upload and text entry are also available.
+
+## Run
 
 ```powershell
-.venv\Scripts\python.exe -m unittest discover -s tests -v
+.\.venv\Scripts\python.exe -m streamlit run app.py
 ```
 
-The six tests check the visible labels, both buttons, keeping both previews,
-blank input, and clearing previews after the history changes.
+Open the local URL shown by Streamlit in your browser. Keep the terminal open.
+The tracked Streamlit configuration binds to `127.0.0.1` and disables usage
+statistics. Use Ctrl+C in that terminal to stop that instance. Do not stop a
+different instance holding unsaved work.
 
-## What each file means
+## Prepare and review text
 
-| File | Simple explanation |
-| --- | --- |
-| `app.py` | The application: draws the page, reads your input, and shows the placeholders. |
-| `requirements.txt` | Lists Streamlit and its tested version so Python can install it. Its supporting packages install automatically. |
-| `README.md` | This guide to running, testing, and understanding the project. |
-| `.streamlit/config.toml` | Sets the page colors, disables usage statistics, and keeps the server on your own computer. |
-| `.gitignore` | Tells Git to leave out installed packages, temporary files, and local secret files. It does not control whether the GitHub repository is private. |
-| `tests/test_app.py` | Automatically interacts with the app and checks that the expected behavior works. |
+1. Select the correct animal, or upload its source document. Review the History,
+   Other Info and Updates fields. Select only relevant photos or video frames.
+2. Optionally import a cropped message screenshot with local OCR. Correct the
+   recognized text and review its date before applying it to a source field.
+3. Check existing saved work before requesting any new analysis or generation.
+4. Explicitly analyze the selected evidence when a new Animal Profile is needed.
+   Review names, dates, attribution, health, behavior and unknown information.
+5. Explicitly generate drafts when ready. Review all languages and versions.
+   Automated editorial findings support human review; they do not certify truth.
+6. Copy suitable wording into the independent final website editors and edit
+   the Facebook versions. Switching languages or drafts does not regenerate them.
+7. Review findings and questions, record clarifications, and compare saved
+   versions as needed. Restoring a version requires an explicit confirmation.
+8. Download a private backup before major changes, and manually publish only
+   text that a responsible person has checked.
 
-`.venv/` is generated by the setup command and contains installed packages. Python
-may also create `__pycache__/` folders to help it start faster. Neither belongs in Git.
+Final website editors begin empty. Existing edits survive regeneration; changes
+to evidence mark earlier work potentially outdated. Local revision history and
+undo controls support recovery but do not replace an independent private backup.
+Delete controls affect the selected animal's local saved writing and require
+confirmation; do not use them as part of installing or updating source code.
 
-## If something goes wrong
+## Automated tests
 
-- **Python is not found:** install Python 3.12 and open a new terminal. On Windows,
-  use the `py -3.12` command shown above.
-- **No module named streamlit:** rerun the installation command using the `.venv`
-  Python shown above, then run the startup command with that same Python.
-- **Port 8501 is already in use:** stop the other Streamlit terminal with Ctrl+C,
-  or add `--server.port 8502` to the startup command.
-- **The buttons show no preview:** enter some history first and check for a warning.
-  This milestone shows sample text, so different histories produce the same placeholders.
+The complete suite uses Python `unittest`, mocked provider responses, synthetic
+fixtures, Streamlit AppTest and temporary storage. It includes local video/OCR
+checks. It does not require live AI requests or real Google credentials.
 
-## Privacy and next milestone
+```powershell
+.\.venv\Scripts\python.exe -m unittest discover -s tests -v
+```
 
-Keep the GitHub repository visibility set to **Private**. In GitHub, you can check
-this under the repository's **Settings → General → Danger Zone → Change repository
-visibility**. Running this app locally does not change that setting. Do not upload
-real credentials or private rescue records to the repository.
+Run tests in a checkout containing no real `.env`, credentials or animal data.
+For additional assurance, run with outbound network access blocked. The source
+transfer was verified separately with network-blocking guards and protected
+access to real local workspaces. That verification harness remains local.
 
-For now, run the app and try both buttons. A sensible next learning milestone is to
-agree on the fields and tone of a Dutch adoption description, using fictional animal
-histories. AI and Google Drive can be separate later milestones.
+## Files
+
+- `app.py`: Streamlit interface and source selection.
+- `drive_client.py`, `drive_media.py`, `drive_auth_job.py`: read-only Drive access.
+- `ai_config.py`, `ai_service.py`, `animal_profile.py`, `analysis_*.py`: analysis.
+- `content_*.py`, `clipboard_component.py`: bilingual drafts and manual editors.
+- `editorial_*.py`, `draft_evidence.py`: assessment, history and private storage.
+- Other root Python modules: extraction, evidence validation and local media/OCR.
+- `tests/`: automated tests and synthetic test support.
+- `requirements.txt`: dependencies; `.streamlit/config.toml`: existing local settings.
+
+## Privacy
+
+`.gitignore` excludes environment files, credentials, tokens, `local_state`,
+virtual environments, animal records, media, diagnostics, backups and local tools.
+Ignore rules do not remove files already tracked by Git. Always inspect both the
+changed files and the exact staged diff before committing. Keep real animal
+records and confidential foundation information out of source code and tests.
+Repository visibility is managed separately on GitHub; local setup does not
+change it.

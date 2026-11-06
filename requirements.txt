@@ -1,1 +1,16 @@
 streamlit==1.66.1
+python-docx==1.2.0
+google-api-python-client>=2.150,<3
+google-auth>=2.35,<3
+google-auth-httplib2>=0.2,<1
+google-auth-oauthlib>=1.5,<2
+# Explicit dependency for bounded, resized photo previews (already used by Streamlit).
+Pillow>=10,<14
+# Milestone 5: structured Responses API, local configuration and bounded video frames.
+openai>=2.54,<3  # Structured Responses parsing for analysis and bilingual writing.
+pydantic>=2.10,<3
+python-dotenv>=1,<2
+# Shared by the video sampler and local screenshot OCR (neither opens GUI windows).
+opencv-python>=4.10,<5
+# Includes local recognition models; no Tesseract installation or OCR API key needed.
+rapidocr_onnxruntime>=1.2.3,<2
